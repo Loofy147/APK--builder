@@ -24,6 +24,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Run Tests
+        run: ./gradlew test
+
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
