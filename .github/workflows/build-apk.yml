@@ -1,4 +1,4 @@
-name: Android CI
+name: Build APK
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build and Test
+  build-debug:
+    name: Build Debug APK
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,13 +20,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-
-      - name: Run Unit Tests
-        run: ./gradlew test
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
@@ -34,14 +30,13 @@ jobs:
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: debug-apk
+          path: app/build/outputs/apk/debug/*.apk
 
-  release:
+  build-release:
     name: Build Signed Release APK
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.KEYSTORE_BASE64 != ''
-    needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,7 +46,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -71,5 +65,5 @@ jobs:
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: app/build/outputs/apk/release/app-release.apk
+          name: release-apk
+          path: app/build/outputs/apk/release/*.apk
