@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HelloWorldApp"
+rootProject.name = "Jomra"
 include ":app"

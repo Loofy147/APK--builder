@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "text": "Who was the first President of the United States?",
+    "options": ["George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"],
+    "correctAnswer": 0,
+    "difficulty": 1
+  },
+  {
+    "id": 2,
+    "text": "In which year did World War II end?",
+    "options": ["1943", "1944", "1945", "1946"],
+    "correctAnswer": 2,
+    "difficulty": 1
+  },
+  {
+    "id": 3,
+    "text": "Who was known as the 'Maid of Orleans'?",
+    "options": ["Mary Magdalene", "Joan of Arc", "Marie Antoinette", "Catherine de Medici"],
+    "correctAnswer": 1,
+    "difficulty": 2
+  },
+  {
+    "id": 4,
+    "text": "What was the name of the ancient trade route that connected the East and West?",
+    "options": ["The Spice Road", "The Silk Road", "The Gold Road", "The Tea Road"],
+    "correctAnswer": 1,
+    "difficulty": 2
+  },
+  {
+    "id": 5,
+    "text": "Which empire was ruled by Julius Caesar?",
+    "options": ["Greek Empire", "Persian Empire", "Roman Empire", "Ottoman Empire"],
+    "correctAnswer": 2,
+    "difficulty": 1
+  },
+  {
+    "id": 6,
+    "text": "Who wrote the 'I Have a Dream' speech?",
+    "options": ["Malcolm X", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks"],
+    "correctAnswer": 1,
+    "difficulty": 1
+  },
+  {
+    "id": 7,
+    "text": "The Magna Carta was signed in which century?",
+    "options": ["11th", "12th", "13th", "14th"],
+    "correctAnswer": 2,
+    "difficulty": 3
+  },
+  {
+    "id": 8,
+    "text": "Who was the primary author of the Declaration of Independence?",
+    "options": ["Benjamin Franklin", "Alexander Hamilton", "Thomas Jefferson", "James Madison"],
+    "correctAnswer": 2,
+    "difficulty": 2
+  },
+  {
+    "id": 9,
+    "text": "Which French leader was defeated at the Battle of Waterloo?",
+    "options": ["Louis XIV", "Charles de Gaulle", "Napoleon Bonaparte", "Robespierre"],
+    "correctAnswer": 2,
+    "difficulty": 1
+  },
+  {
+    "id": 10,
+    "text": "The Renaissance began in which country?",
+    "options": ["France", "Italy", "Germany", "England"],
+    "correctAnswer": 1,
+    "difficulty": 2
+  }
+]

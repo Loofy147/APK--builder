@@ -1,6 +1,6 @@
-# HelloWorldApp
+# Jomra
 
-A complete, "cloud-native" Android application setup for GitHub Actions. Designed to be built and managed entirely from your phone.
+A history learning app with a Spaced Repetition System (SRS-lite) built to be managed entirely from your phone.
 
 ## 📱 How to Build and Install (Phone Only)
 
