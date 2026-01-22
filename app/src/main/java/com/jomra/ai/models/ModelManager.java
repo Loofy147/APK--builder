@@ -56,13 +56,16 @@ public class ModelManager {
 
             // Try GPU acceleration
             try {
+                // RED TEAM: GpuDelegate can throw Throwable (Errors) on some devices
                 GpuDelegate delegate = new GpuDelegate();
                 options.addDelegate(delegate);
                 gpuDelegates.put(modelName, delegate);
                 Log.i(TAG, "GPU acceleration enabled for: " + modelName);
-            } catch (Exception e) {
-                Log.w(TAG, "GPU acceleration not supported, falling back to CPU", e);
-                options.setUseNNAPI(true); // Fallback to NNAPI
+            } catch (Throwable t) {
+                Log.w(TAG, "GPU acceleration not supported, falling back to CPU: " + t.getMessage());
+                try {
+                    options.setUseNNAPI(true); // Fallback to NNAPI
+                } catch (Throwable ignore) {}
             }
 
             Interpreter interpreter = new Interpreter(modelBuffer, options);

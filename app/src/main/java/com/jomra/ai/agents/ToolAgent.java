@@ -51,6 +51,8 @@ public class ToolAgent implements Agent {
             params.put("title", "AI Assistant");
             String msg = query.replaceAll("(?i)notify|remind|me", "").trim();
             params.put("message", msg);
+        } else if (lowerQuery.contains("list apps") || lowerQuery.contains("show apps")) {
+            toolName = "list_apps";
         }
 
         if (toolName == null) {
