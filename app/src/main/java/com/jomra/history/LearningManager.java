@@ -109,13 +109,12 @@ public class LearningManager {
     }
 
     private void saveAsync(int questionId, long nextReview, long interval, float ease) {
-        new Thread(() -> {
-            prefs.edit()
-                .putLong(PREFIX_NEXT_REVIEW + questionId, nextReview)
-                .putLong(PREFIX_INTERVAL + questionId, interval)
-                .putFloat(PREFIX_EASE + questionId, ease)
-                .apply();
-        }).start();
+        // SharedPreferences.apply() is already asynchronous
+        prefs.edit()
+            .putLong(PREFIX_NEXT_REVIEW + questionId, nextReview)
+            .putLong(PREFIX_INTERVAL + questionId, interval)
+            .putFloat(PREFIX_EASE + questionId, ease)
+            .apply();
     }
 
     /**
