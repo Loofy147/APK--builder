@@ -68,25 +68,43 @@ public class MainActivity extends AppCompatActivity {
         tvResponse.setText("Initializing AI agents...");
         new Thread(() -> {
             try {
+                // Check for models in assets
+                boolean hasModels = false;
+                try {
+                    String[] models = getAssets().list("models");
+                    hasModels = models != null && models.length > 0;
+                } catch (Exception e) {
+                    Log.w(TAG, "No models directory found in assets", e);
+                }
+
                 modelManager = new ModelManager(this);
                 toolRegistry = new ToolRegistry(this);
                 apiClient = new APIClient();
                 orchestrator = new AgentOrchestrator();
+
                 orchestrator.registerAgent(new QAAgent(this, modelManager));
                 orchestrator.registerAgent(new RLAgent(this, modelManager));
                 orchestrator.registerAgent(new ToolAgent(this, toolRegistry));
+
                 conversationHistory = new ConversationHistory(20);
                 currentAppState = buildAppState();
+
+                final boolean finalHasModels = hasModels;
                 runOnUiThread(() -> {
                     showLoading(false);
-                    tvResponse.setText("AI system ready!");
+                    if (!finalHasModels) {
+                        tvResponse.setText("AI system ready (No models found, using fallback logic)");
+                    } else {
+                        tvResponse.setText("AI system ready!");
+                    }
                     updateAgentInfo();
                     updateStats();
                 });
             } catch (Exception e) {
+                Log.e(TAG, "Initialization failed", e);
                 runOnUiThread(() -> {
                     showLoading(false);
-                    tvResponse.setText("Error: " + e.getMessage());
+                    tvResponse.setText("Initialization failed: " + e.getMessage());
                 });
             }
         }).start();
