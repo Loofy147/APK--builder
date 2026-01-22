@@ -1,8 +1,8 @@
 package com.jomra.ai.tools;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CalculatorTool implements Tool {
     @Override public String getName() { return "calculator"; }
@@ -16,9 +16,7 @@ public class CalculatorTool implements Tool {
         String expr = (String) params.get("expression");
         if (expr == null || expr.trim().isEmpty()) throw new ToolException("Expression cannot be empty");
 
-        // Fix the syntax error: escape the backslash
         expr = expr.replaceAll("\\s", "");
-
         if (!expr.matches("[0-9+\\-*/().]+")) throw new ToolException("Invalid characters in expression");
 
         try {
@@ -27,10 +25,14 @@ public class CalculatorTool implements Tool {
                 throw new ToolException("Calculation resulted in an invalid number");
             }
 
+            Map<String, Object> data = new HashMap<>();
+            data.put("result", result);
+            data.put("expression", expr);
+
             return new ToolResult.Builder()
                 .success(true)
                 .resultText("Result: " + result)
-                .data(Map.of("result", result, "expression", expr))
+                .data(data)
                 .executionTime(System.currentTimeMillis() - startTime)
                 .build();
         } catch (Exception e) {
@@ -38,67 +40,47 @@ public class CalculatorTool implements Tool {
         }
     }
 
-    /**
-     * Improved expression evaluator (still simple, but handles basic order of ops).
-     */
     private double evaluateExpression(String expression) {
         return new Object() {
             int pos = -1, ch;
-
-            void nextChar() {
-                ch = (++pos < expression.length()) ? expression.charAt(pos) : -1;
-            }
-
+            void nextChar() { ch = (++pos < expression.length()) ? expression.charAt(pos) : -1; }
             boolean eat(int charToEat) {
                 while (ch == ' ') nextChar();
-                if (ch == charToEat) {
-                    nextChar();
-                    return true;
-                }
+                if (ch == charToEat) { nextChar(); return true; }
                 return false;
             }
-
             double parse() {
                 nextChar();
                 double x = parseExpression();
                 if (pos < expression.length()) throw new RuntimeException("Unexpected: " + (char)ch);
                 return x;
             }
-
             double parseExpression() {
                 double x = parseTerm();
                 for (;;) {
-                    if      (eat('+')) x += parseTerm(); // addition
-                    else if (eat('-')) x -= parseTerm(); // subtraction
+                    if      (eat('+')) x += parseTerm();
+                    else if (eat('-')) x -= parseTerm();
                     else return x;
                 }
             }
-
             double parseTerm() {
                 double x = parseFactor();
                 for (;;) {
-                    if      (eat('*')) x *= parseFactor(); // multiplication
-                    else if (eat('/')) x /= parseFactor(); // division
+                    if      (eat('*')) x *= parseFactor();
+                    else if (eat('/')) x /= parseFactor();
                     else return x;
                 }
             }
-
             double parseFactor() {
-                if (eat('+')) return parseFactor(); // unary plus
-                if (eat('-')) return -parseFactor(); // unary minus
-
+                if (eat('+')) return parseFactor();
+                if (eat('-')) return -parseFactor();
                 double x;
                 int startPos = this.pos;
-                if (eat('(')) { // parentheses
-                    x = parseExpression();
-                    eat(')');
-                } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
+                if (eat('(')) { x = parseExpression(); eat(')'); }
+                else if ((ch >= '0' && ch <= '9') || ch == '.') {
                     while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
                     x = Double.parseDouble(expression.substring(startPos, this.pos));
-                } else {
-                    throw new RuntimeException("Unexpected: " + (char)ch);
-                }
-
+                } else throw new RuntimeException("Unexpected: " + (char)ch);
                 return x;
             }
         }.parse();

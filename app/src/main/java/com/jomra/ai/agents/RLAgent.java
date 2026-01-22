@@ -80,12 +80,16 @@ public class RLAgent implements Agent {
 
             Action action = decodeAction(actionIndex);
 
+            Map<String, Object> metadata = new HashMap<>();
+            metadata.put("action_index", actionIndex);
+            metadata.put("q_value", maxQ);
+
             return new AgentResponse.Builder()
                 .status(AgentResponse.ResponseStatus.SUCCESS)
                 .text("RL Agent suggested: " + action.getDescription())
                 .confidence(Math.min(1.0f, Math.max(0.0f, maxQ)))
                 .action(action)
-                .metadata(Map.of("action_index", actionIndex, "q_value", maxQ))
+                .metadata(metadata)
                 .build();
 
         } catch (Exception e) {
@@ -97,7 +101,7 @@ public class RLAgent implements Agent {
         switch (actionIndex) {
             case 0: return Action.openApp("com.android.chrome");
             case 1: return Action.sendMessage("User", "Hello!");
-            default: return new Action("GENERIC", "Perform action " + actionIndex, Map.of());
+            default: return new Action("GENERIC", "Perform action " + actionIndex, Collections.<String, Object>emptyMap());
         }
     }
 

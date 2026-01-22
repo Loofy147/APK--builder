@@ -1,12 +1,14 @@
 package com.jomra.ai.agents;
 
+import com.jomra.ai.api.APIClient;
 import com.jomra.ai.tools.ToolRegistry;
+import java.util.Collections;
 import java.util.Map;
 
 public class AgentContext {
     private final AppState appState;
     private final ToolRegistry toolRegistry;
-    private final Object apiClient; // Placeholder for APIClient
+    private final APIClient apiClient;
     private final ConversationHistory history;
     private final Map<String, Object> metadata;
     private final boolean trainingMode;
@@ -22,7 +24,7 @@ public class AgentContext {
 
     public AppState getAppState() { return appState; }
     public ToolRegistry getToolRegistry() { return toolRegistry; }
-    public Object getApiClient() { return apiClient; }
+    public APIClient getApiClient() { return apiClient; }
     public ConversationHistory getHistory() { return history; }
     public Map<String, Object> getMetadata() { return metadata; }
     public boolean isTraining() { return trainingMode; }
@@ -30,9 +32,9 @@ public class AgentContext {
     public static class Builder {
         private AppState appState;
         private ToolRegistry toolRegistry;
-        private Object apiClient;
+        private APIClient apiClient;
         private ConversationHistory history;
-        private Map<String, Object> metadata = Map.of();
+        private Map<String, Object> metadata = Collections.emptyMap();
         private boolean trainingMode = false;
 
         public Builder appState(AppState state) {
@@ -45,7 +47,7 @@ public class AgentContext {
             return this;
         }
 
-        public Builder apiClient(Object client) {
+        public Builder apiClient(APIClient client) {
             this.apiClient = client;
             return this;
         }

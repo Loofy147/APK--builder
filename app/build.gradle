@@ -68,7 +68,6 @@ android {
 
     buildFeatures {
         buildConfig = true
-        mlModelBinding = true  // Enable ML Model binding
     }
 
     lint {

@@ -1,5 +1,6 @@
 package com.jomra.ai.agents;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class HealthStatus {
@@ -22,10 +23,10 @@ public class HealthStatus {
     public Map<String, Object> getMetrics() { return metrics; }
 
     public static HealthStatus healthy() {
-        return new HealthStatus(Status.HEALTHY, "Agent operational", Map.of());
+        return new HealthStatus(Status.HEALTHY, "Agent operational", Collections.<String, Object>emptyMap());
     }
 
     public static HealthStatus unhealthy(String reason) {
-        return new HealthStatus(Status.UNHEALTHY, reason, Map.of());
+        return new HealthStatus(Status.UNHEALTHY, reason, Collections.<String, Object>emptyMap());
     }
 }

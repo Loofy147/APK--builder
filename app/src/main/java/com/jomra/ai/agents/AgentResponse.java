@@ -1,5 +1,6 @@
 package com.jomra.ai.agents;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class AgentResponse {
@@ -38,7 +39,7 @@ public class AgentResponse {
         private ResponseStatus status = ResponseStatus.SUCCESS;
         private String text = "";
         private float confidence = 0.0f;
-        private Map<String, Object> metadata = Map.of();
+        private Map<String, Object> metadata = Collections.emptyMap();
         private Action action;
         private String errorMessage;
 
