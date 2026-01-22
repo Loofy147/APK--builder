@@ -46,21 +46,21 @@ public class QAAgent implements Agent {
         if (query == null || query.trim().isEmpty()) return AgentResponse.error("Empty input");
 
         try {
-            // Tokenize
             int[] tokens = tokenize(query);
-
-            // Run inference
             float[][] output = runInference(tokens);
 
-            // Post-process (Simplified)
             String answer = "Based on my analysis of your question: \"" + query + "\", I've generated a response using the BERT model.";
             float confidence = computeConfidence(output);
+
+            Map<String, Object> metadata = new HashMap<>();
+            metadata.put("model", MODEL_NAME);
+            metadata.put("tokens", tokens.length);
 
             return new AgentResponse.Builder()
                 .status(AgentResponse.ResponseStatus.SUCCESS)
                 .text(answer)
                 .confidence(confidence)
-                .metadata(Map.of("model", MODEL_NAME, "tokens", tokens.length))
+                .metadata(metadata)
                 .build();
 
         } catch (Exception e) {

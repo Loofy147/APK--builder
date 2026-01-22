@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jomra.ai.agents.*;
+import com.jomra.ai.api.APIClient;
 import com.jomra.ai.models.ModelManager;
 import com.jomra.ai.tools.ToolRegistry;
 import java.util.Calendar;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private AgentOrchestrator orchestrator;
     private ModelManager modelManager;
     private ToolRegistry toolRegistry;
+    private APIClient apiClient;
     private ConversationHistory conversationHistory;
     private AppState currentAppState;
 
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 modelManager = new ModelManager(this);
                 toolRegistry = new ToolRegistry(this);
+                apiClient = new APIClient();
                 orchestrator = new AgentOrchestrator();
                 orchestrator.registerAgent(new QAAgent(this, modelManager));
                 orchestrator.registerAgent(new RLAgent(this, modelManager));
@@ -98,8 +101,12 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 AgentContext context = new AgentContext.Builder()
-                    .appState(currentAppState).tools(toolRegistry)
-                    .history(conversationHistory).training(currentMode == AgentMode.RL).build();
+                    .appState(currentAppState)
+                    .tools(toolRegistry)
+                    .apiClient(apiClient)
+                    .history(conversationHistory)
+                    .training(currentMode == AgentMode.RL)
+                    .build();
                 AgentResponse response = orchestrator.processSingle(context, input);
                 if (response != null && response.isSuccess()) {
                     conversationHistory.addTurn(input, response.getText());

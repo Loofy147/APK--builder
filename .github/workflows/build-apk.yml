@@ -96,14 +96,15 @@ jobs:
 
       - name: Decode Keystore
         if: env.KEYSTORE_BASE64 != ''
-        run: echo "$KEYSTORE_BASE64" | base64 --decode > app/release.keystore
+        run: |
+          printf "%s" "$KEYSTORE_BASE64" | base64 -d --ignore-garbage > app/release.keystore
 
       - name: Build Optimized Release APK
         run: |
           if [ -f "app/release.keystore" ]; then
             ./gradlew assembleRelease --stacktrace
           else
-            echo "No keystore found, skipping release build"
+            echo "No keystore found, skipping release build. Check if KEYSTORE_BASE64 secret is set."
             exit 0
           fi
 

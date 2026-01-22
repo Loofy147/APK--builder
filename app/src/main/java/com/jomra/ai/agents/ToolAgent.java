@@ -46,6 +46,11 @@ public class ToolAgent implements Agent {
             toolName = "web_search";
             String searchQuery = query.replaceAll("(?i)search|find", "").trim();
             params.put("query", searchQuery);
+        } else if (lowerQuery.contains("notify") || lowerQuery.contains("remind")) {
+            toolName = "notification";
+            params.put("title", "AI Assistant");
+            String msg = query.replaceAll("(?i)notify|remind|me", "").trim();
+            params.put("message", msg);
         }
 
         if (toolName == null) {

@@ -29,7 +29,7 @@ public class AgentOrchestrator {
 
     public AgentResponse processSingle(AgentContext context, String userInput) {
         AgentInput input = new AgentInput(userInput,
-            AgentInput.InputType.TEXT, Map.of());
+            AgentInput.InputType.TEXT, Collections.emptyMap());
         Agent selectedAgent = selector.selectAgent(input, agents.values());
         if (selectedAgent == null) {
             return AgentResponse.error("No suitable agent found");
@@ -40,7 +40,7 @@ public class AgentOrchestrator {
 
     public AgentResponse processEnsemble(AgentContext context, String userInput) {
         AgentInput input = new AgentInput(userInput,
-            AgentInput.InputType.TEXT, Map.of());
+            AgentInput.InputType.TEXT, Collections.emptyMap());
         List<Future<AgentResponse>> futures = new ArrayList<>();
         for (Agent agent : agents.values()) {
             Future<AgentResponse> future = executor.submit(() -> {
@@ -74,7 +74,7 @@ public class AgentOrchestrator {
                                         String userInput,
                                         String[] agentOrder) {
         AgentInput input = new AgentInput(userInput,
-            AgentInput.InputType.TEXT, Map.of());
+            AgentInput.InputType.TEXT, Collections.emptyMap());
         AgentResponse currentResponse = null;
         for (String agentId : agentOrder) {
             Agent agent = agents.get(agentId);
@@ -137,9 +137,16 @@ public class AgentOrchestrator {
         }
         Map<String, Object> meta = new HashMap<>();
         meta.put("ensemble_size", responses.size());
-        meta.put("responses", responses.stream()
-            .map(r -> Map.of("text", r.getText(), "confidence", r.getConfidence()))
-            .toArray());
+
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (AgentResponse r : responses) {
+            Map<String, Object> rMeta = new HashMap<>();
+            rMeta.put("text", r.getText());
+            rMeta.put("confidence", r.getConfidence());
+            responseList.add(rMeta);
+        }
+        meta.put("responses", responseList);
+
         return new AgentResponse.Builder()
             .status(best.getStatus())
             .text(best.getText())
