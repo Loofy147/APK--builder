@@ -1,72 +1,52 @@
 [
-  {
-    "id": 1,
-    "text": "Who was the first President of the United States?",
-    "options": ["George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"],
-    "correctAnswer": 0,
-    "difficulty": 1
-  },
-  {
-    "id": 2,
-    "text": "In which year did World War II end?",
-    "options": ["1943", "1944", "1945", "1946"],
-    "correctAnswer": 2,
-    "difficulty": 1
-  },
-  {
-    "id": 3,
-    "text": "Who was known as the 'Maid of Orleans'?",
-    "options": ["Mary Magdalene", "Joan of Arc", "Marie Antoinette", "Catherine de Medici"],
-    "correctAnswer": 1,
-    "difficulty": 2
-  },
-  {
-    "id": 4,
-    "text": "What was the name of the ancient trade route that connected the East and West?",
-    "options": ["The Spice Road", "The Silk Road", "The Gold Road", "The Tea Road"],
-    "correctAnswer": 1,
-    "difficulty": 2
-  },
-  {
-    "id": 5,
-    "text": "Which empire was ruled by Julius Caesar?",
-    "options": ["Greek Empire", "Persian Empire", "Roman Empire", "Ottoman Empire"],
-    "correctAnswer": 2,
-    "difficulty": 1
-  },
-  {
-    "id": 6,
-    "text": "Who wrote the 'I Have a Dream' speech?",
-    "options": ["Malcolm X", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks"],
-    "correctAnswer": 1,
-    "difficulty": 1
-  },
-  {
-    "id": 7,
-    "text": "The Magna Carta was signed in which century?",
-    "options": ["11th", "12th", "13th", "14th"],
-    "correctAnswer": 2,
-    "difficulty": 3
-  },
-  {
-    "id": 8,
-    "text": "Who was the primary author of the Declaration of Independence?",
-    "options": ["Benjamin Franklin", "Alexander Hamilton", "Thomas Jefferson", "James Madison"],
-    "correctAnswer": 2,
-    "difficulty": 2
-  },
-  {
-    "id": 9,
-    "text": "Which French leader was defeated at the Battle of Waterloo?",
-    "options": ["Louis XIV", "Charles de Gaulle", "Napoleon Bonaparte", "Robespierre"],
-    "correctAnswer": 2,
-    "difficulty": 1
-  },
-  {
-    "id": 10,
-    "text": "The Renaissance began in which country?",
-    "options": ["France", "Italy", "Germany", "England"],
-    "correctAnswer": 1,
-    "difficulty": 2
-  }
+  {"id": 1, "text": "Who was the first President of the United States?", "options": ["George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"], "correctAnswer": 0, "difficulty": 1},
+  {"id": 2, "text": "In which year did World War II end?", "options": ["1943", "1944", "1945", "1946"], "correctAnswer": 2, "difficulty": 1},
+  {"id": 3, "text": "Who was known as the 'Maid of Orleans'?", "options": ["Mary Magdalene", "Joan of Arc", "Marie Antoinette", "Catherine de Medici"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 4, "text": "What ancient trade route connected East and West?", "options": ["The Spice Road", "The Silk Road", "The Gold Road", "The Tea Road"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 5, "text": "Which empire was ruled by Julius Caesar?", "options": ["Greek Empire", "Persian Empire", "Roman Empire", "Ottoman Empire"], "correctAnswer": 2, "difficulty": 1},
+  {"id": 6, "text": "Who delivered the 'I Have a Dream' speech?", "options": ["Malcolm X", "Martin Luther King Jr.", "Nelson Mandela", "Rosa Parks"], "correctAnswer": 1, "difficulty": 1},
+  {"id": 7, "text": "The Magna Carta was signed in which century?", "options": ["11th", "12th", "13th", "14th"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 8, "text": "Who authored the Declaration of Independence?", "options": ["Benjamin Franklin", "Alexander Hamilton", "Thomas Jefferson", "James Madison"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 9, "text": "Which leader was defeated at Waterloo?", "options": ["Louis XIV", "Charles de Gaulle", "Napoleon Bonaparte", "Robespierre"], "correctAnswer": 2, "difficulty": 1},
+  {"id": 10, "text": "The Renaissance began in which country?", "options": ["France", "Italy", "Germany", "England"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 11, "text": "What year did the Berlin Wall fall?", "options": ["1987", "1988", "1989", "1990"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 12, "text": "Who was the first woman Prime Minister of the UK?", "options": ["Queen Victoria", "Margaret Thatcher", "Theresa May", "Elizabeth II"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 13, "text": "In which year did Columbus reach the Americas?", "options": ["1488", "1492", "1498", "1502"], "correctAnswer": 1, "difficulty": 1},
+  {"id": 14, "text": "Which civilization built Machu Picchu?", "options": ["Aztec", "Maya", "Inca", "Olmec"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 15, "text": "The Hundred Years' War was between which countries?", "options": ["England & France", "Spain & Portugal", "Germany & Italy", "Russia & Poland"], "correctAnswer": 0, "difficulty": 2},
+  {"id": 16, "text": "Who painted the Sistine Chapel ceiling?", "options": ["Leonardo da Vinci", "Michelangelo", "Raphael", "Donatello"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 17, "text": "What year did the Titanic sink?", "options": ["1910", "1911", "1912", "1913"], "correctAnswer": 2, "difficulty": 1},
+  {"id": 18, "text": "Which ancient wonder is still standing?", "options": ["Colossus of Rhodes", "Hanging Gardens", "Great Pyramid of Giza", "Lighthouse of Alexandria"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 19, "text": "Who was the first person in space?", "options": ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "John Glenn"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 20, "text": "The Great Fire of London occurred in which year?", "options": ["1566", "1616", "1666", "1716"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 21, "text": "Who unified Germany in 1871?", "options": ["Otto von Bismarck", "Kaiser Wilhelm I", "Frederick the Great", "Adolf Hitler"], "correctAnswer": 0, "difficulty": 3},
+  {"id": 22, "text": "What was the capital of the Byzantine Empire?", "options": ["Rome", "Athens", "Constantinople", "Alexandria"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 23, "text": "In which year did India gain independence?", "options": ["1945", "1946", "1947", "1948"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 24, "text": "Who was Cleopatra's famous Roman lover?", "options": ["Julius Caesar", "Mark Antony", "Pompey", "Octavian"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 25, "text": "The Rosetta Stone helped decipher which language?", "options": ["Sanskrit", "Hieroglyphics", "Cuneiform", "Linear B"], "correctAnswer": 1, "difficulty": 3},
+  {"id": 26, "text": "What year did the American Civil War begin?", "options": ["1859", "1860", "1861", "1862"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 27, "text": "Who was the Sun King of France?", "options": ["Louis XIII", "Louis XIV", "Louis XV", "Louis XVI"], "correctAnswer": 1, "difficulty": 3},
+  {"id": 28, "text": "Which battle ended Napoleon's rule?", "options": ["Battle of Austerlitz", "Battle of Leipzig", "Battle of Waterloo", "Battle of Trafalgar"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 29, "text": "The printing press was invented by whom?", "options": ["Johannes Gutenberg", "Leonardo da Vinci", "Benjamin Franklin", "William Caxton"], "correctAnswer": 0, "difficulty": 2},
+  {"id": 30, "text": "What year did the USSR dissolve?", "options": ["1989", "1990", "1991", "1992"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 31, "text": "Who wrote 'The Communist Manifesto'?", "options": ["Lenin", "Stalin", "Karl Marx", "Trotsky"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 32, "text": "Which Chinese dynasty built the Forbidden City?", "options": ["Tang", "Song", "Ming", "Qing"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 33, "text": "The Boston Tea Party occurred in which year?", "options": ["1770", "1771", "1773", "1775"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 34, "text": "Who discovered penicillin?", "options": ["Louis Pasteur", "Alexander Fleming", "Marie Curie", "Jonas Salk"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 35, "text": "What was the code name for D-Day?", "options": ["Operation Overlord", "Operation Torch", "Operation Barbarossa", "Operation Market Garden"], "correctAnswer": 0, "difficulty": 3},
+  {"id": 36, "text": "The Aztec Empire was located in modern-day?", "options": ["Peru", "Mexico", "Guatemala", "Colombia"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 37, "text": "Who was the first Roman Emperor?", "options": ["Julius Caesar", "Augustus", "Nero", "Caligula"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 38, "text": "The Thirty Years' War began in which year?", "options": ["1598", "1608", "1618", "1628"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 39, "text": "Who led the Mongol Empire?", "options": ["Attila the Hun", "Genghis Khan", "Kublai Khan", "Tamerlane"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 40, "text": "The Treaty of Versailles ended which war?", "options": ["Franco-Prussian War", "World War I", "World War II", "Napoleonic Wars"], "correctAnswer": 1, "difficulty": 2},
+  {"id": 41, "text": "Who was the 16th President of the United States?", "options": ["Andrew Johnson", "Abraham Lincoln", "Ulysses S. Grant", "James Buchanan"], "correctAnswer": 1, "difficulty": 1},
+  {"id": 42, "text": "The Black Death peaked in Europe in which century?", "options": ["12th", "13th", "14th", "15th"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 43, "text": "Who invented the telephone?", "options": ["Thomas Edison", "Nikola Tesla", "Alexander Graham Bell", "Guglielmo Marconi"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 44, "text": "The Spanish Armada was defeated in which year?", "options": ["1568", "1578", "1588", "1598"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 45, "text": "Who was the Egyptian pharaoh known for monotheism?", "options": ["Ramses II", "Tutankhamun", "Akhenaten", "Khufu"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 46, "text": "The French Revolution began in which year?", "options": ["1787", "1788", "1789", "1790"], "correctAnswer": 2, "difficulty": 2},
+  {"id": 47, "text": "Who painted the Mona Lisa?", "options": ["Michelangelo", "Raphael", "Leonardo da Vinci", "Caravaggio"], "correctAnswer": 2, "difficulty": 1},
+  {"id": 48, "text": "The Cold War was primarily between?", "options": ["USA & China", "USA & USSR", "UK & Germany", "France & Russia"], "correctAnswer": 1, "difficulty": 1},
+  {"id": 49, "text": "Who was the first female pharaoh of Egypt?", "options": ["Cleopatra", "Nefertiti", "Hatshepsut", "Nefertari"], "correctAnswer": 2, "difficulty": 3},
+  {"id": 50, "text": "The Great Wall of China was built primarily during?", "options": ["Han Dynasty", "Ming Dynasty", "Tang Dynasty", "Qin Dynasty"], "correctAnswer": 1, "difficulty": 3}
 ]

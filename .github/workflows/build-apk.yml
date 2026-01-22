@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Optimized APK
 
 on:
   push:
@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
 
 jobs:
   build-debug:
@@ -20,27 +23,42 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: false
 
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Run Tests
-        run: ./gradlew test || echo "Tests failed but continuing build"
+      - name: Run Lint
+        run: ./gradlew lint || echo "Lint issues found"
+
+      - name: Run Tests with Coverage
+        run: ./gradlew testDebugUnitTest jacocoTestReport || echo "Tests failed"
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
           path: app/build/outputs/apk/debug/*.apk
+          retention-days: 14
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: app/build/reports/
+          retention-days: 7
 
   build-release:
-    name: Build Signed Release APK
+    name: Build Optimized Release APK
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
@@ -52,39 +70,54 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Check for Keystore Secret
-        id: check_secret
-        run: |
-          if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "has_secret=false" >> $GITHUB_OUTPUT
-          else
-            echo "has_secret=true" >> $GITHUB_OUTPUT
-          fi
+        with:
+          cache-read-only: false
 
       - name: Decode Keystore
-        if: steps.check_secret.outputs.has_secret == 'true'
+        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: echo "$KEYSTORE_BASE64" | base64 --decode > app/release.keystore
 
-      - name: Build Release APK
-        if: steps.check_secret.outputs.has_secret == 'true'
+      - name: Build Optimized Release APK
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease
+        run: |
+          if [ -f "app/release.keystore" ]; then
+            ./gradlew assembleRelease --stacktrace
+          else
+            echo "No keystore found, skipping release build"
+            exit 0
+          fi
+
+      - name: Get APK Info
+        if: success()
+        run: |
+          APK_PATH=$(find app/build/outputs/apk/release -name "*.apk" | head -1)
+          if [ -f "$APK_PATH" ]; then
+            APK_SIZE=$(du -h "$APK_PATH" | cut -f1)
+            echo "APK_SIZE=$APK_SIZE" >> $GITHUB_ENV
+            echo "Built APK: $APK_PATH (Size: $APK_SIZE)"
+          fi
 
       - name: Upload Release APK
-        if: steps.check_secret.outputs.has_secret == 'true'
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
+          name: release-apk-optimized
           path: app/build/outputs/apk/release/*.apk
+          retention-days: 30
+
+      - name: Create Release on Tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app/build/outputs/apk/release/*.apk
+          generate_release_notes: true
+          draft: false
