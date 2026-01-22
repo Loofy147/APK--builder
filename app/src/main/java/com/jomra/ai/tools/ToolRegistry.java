@@ -20,6 +20,7 @@ public class ToolRegistry {
         registerTool(new SystemInfoTool(context));
         registerTool(new WebSearchTool(context));
         registerTool(new NotificationTool(context));
+        registerTool(new InstalledAppsTool(context));
     }
 
     public void registerTool(Tool tool) {
