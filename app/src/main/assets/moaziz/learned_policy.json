@@ -1,0 +1,40 @@
+{
+  "('env_orchestration_basic', 'easy', 'high_perf')": {
+    "optimal_steps": 3
+  },
+  "('env_coordination', 'medium', 'high_perf')": {
+    "optimal_steps": 5,
+    "best_agents": [
+      "writer"
+    ]
+  },
+  "('env_coordination', 'medium', 'low_perf')": {
+    "optimal_steps": 3,
+    "best_agents": [
+      "researcher",
+      "analyst"
+    ]
+  },
+  "('env_negotiation', 'medium', 'low_perf')": {
+    "best_agents": [
+      "researcher",
+      "writer",
+      "security_expert"
+    ]
+  },
+  "('env_negotiation', 'medium', 'high_perf')": {
+    "best_agents": [
+      "researcher",
+      "analyst",
+      "writer"
+    ]
+  },
+  "('env_system_design', 'medium', 'high_perf')": {},
+  "('env_system_design', 'medium', 'low_perf')": {},
+  "('env_rl_optimization', 'medium', 'low_perf')": {
+    "optimal_group_size": 6
+  },
+  "('env_rl_optimization', 'medium', 'high_perf')": {
+    "optimal_group_size": 4
+  }
+}
