@@ -106,12 +106,3 @@ public class ModelCatalog {
         secureStorage.putString("model_path_" + modelId, path);
     }
 }
-
-class CatalogResponse {
-    public List<ModelInfo> models;
-}
-
-interface CatalogCallback {
-    void onSuccess(List<ModelInfo> models);
-    void onError(String error);
-}

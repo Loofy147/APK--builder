@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.jomra.ai.R;
 import com.jomra.ai.models.ModelCatalog;
 import com.jomra.ai.models.ModelInfo;
@@ -49,6 +51,11 @@ public class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.ViewHolder> 
         holder.ratingBar.setRating(model.rating);
         holder.badgeFeatured.setVisibility(model.featured ? View.VISIBLE : View.GONE);
 
+        Glide.with(context)
+                .load(model.metadata != null ? model.metadata.get("icon_url") : null)
+                .placeholder(R.drawable.ic_default_app)
+                .into(holder.ivModel);
+
         if (catalog.isModelDownloaded(model.id)) {
             holder.btnDownload.setText("Downloaded");
             holder.btnDownload.setEnabled(false);
@@ -63,6 +70,7 @@ public class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvDescription, tvSize, tvCategory;
+        ImageView ivModel;
         RatingBar ratingBar;
         Button btnDownload;
         View badgeFeatured;
@@ -70,6 +78,7 @@ public class ModelAdapter extends RecyclerView.Adapter<ModelAdapter.ViewHolder> 
         ViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName);
+            ivModel = itemView.findViewById(R.id.ivModel);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvSize = itemView.findViewById(R.id.tvSize);
             tvCategory = itemView.findViewById(R.id.tvCategory);
