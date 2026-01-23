@@ -113,13 +113,17 @@ public class MoazizOrchestrator {
 
         // Consult learned policy
         Map<String, Object> action = policy.getAction("env_coordination", "medium", "high_perf");
-        if (action.containsKey("best_agents")) {
-            List<String> best = (List<String>) action.get("best_agents");
-            for (String id : best) {
-                // Map Moaziz IDs to Jomra IDs
-                if (id.equals("writer")) selection.add("qa_agent");
-                if (id.equals("researcher")) selection.add("tool_agent");
-                if (id.equals("analyst") && registeredAgents.containsKey("chain_of_thought")) selection.add("chain_of_thought");
+        if (action != null && action.containsKey("best_agents")) {
+            Object bestObj = action.get("best_agents");
+            if (bestObj instanceof List) {
+                List<?> best = (List<?>) bestObj;
+                for (Object idObj : best) {
+                    String id = String.valueOf(idObj);
+                    // Map Moaziz IDs to Jomra IDs
+                    if (id.equals("writer")) selection.add("qa_agent");
+                    if (id.equals("researcher")) selection.add("tool_agent");
+                    if (id.equals("analyst") && registeredAgents.containsKey("chain_of_thought")) selection.add("chain_of_thought");
+                }
             }
         }
 

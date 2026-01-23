@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         btnSend.setOnClickListener(v -> handleUserInput());
 
-        findViewById(R.id.toolbar).setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        com.google.android.material.appbar.MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();

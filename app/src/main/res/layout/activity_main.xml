@@ -21,7 +21,7 @@
             android:background="?attr/colorPrimary"
             app:title="Jomra AI"
             app:titleTextColor="#FFFFFF"
-            app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
+            app:navigationIcon="@drawable/ic_menu"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Header Card with Agent Info -->

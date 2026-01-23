@@ -56,13 +56,27 @@ public class LargeModelManager {
                 byte[] buffer = new byte[8192];
                 int read;
                 long total = model.sizeBytes;
+                long lastUpdate = 0;
                 while ((read = is.read(buffer)) != -1) {
                     raf.write(buffer, 0, read);
                     downloaded += read;
-                    listener.onProgress(model, downloaded, total, (float) downloaded / total);
+
+                    long now = System.currentTimeMillis();
+                    if (now - lastUpdate > 500) { // Throttle updates to 500ms
+                        listener.onProgress(model, downloaded, total, (float) downloaded / total);
+                        lastUpdate = now;
+                    }
                 }
                 raf.close();
                 is.close();
+
+                // SHA-256 Verification
+                if (model.sha256 != null) {
+                    String actualHash = computeSHA256(tempFile);
+                    if (!actualHash.equalsIgnoreCase(model.sha256)) {
+                        throw new IOException("SHA-256 verification failed");
+                    }
+                }
 
                 if (tempFile.renameTo(finalFile)) {
                     catalog.markDownloaded(model.id, finalFile.getAbsolutePath());
@@ -83,5 +97,18 @@ public class LargeModelManager {
 
     public boolean isChargingOnly() {
         return secureStorage.getString("download_charging_only", "false").equals("true");
+    }
+
+    private String computeSHA256(File file) throws Exception {
+        java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+        try (FileInputStream fis = new FileInputStream(file)) {
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = fis.read(buffer)) != -1) md.update(buffer, 0, read);
+        }
+        byte[] digest = md.digest();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest) sb.append(String.format("%02x", b));
+        return sb.toString();
     }
 }

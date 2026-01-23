@@ -23,9 +23,32 @@ public class DownloadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String modelId = intent.getStringExtra("model_id");
         if (modelId != null) {
-            startDownload(modelId);
+            if (shouldProceedWithDownload()) {
+                startDownload(modelId);
+            } else {
+                Toast.makeText(this, "Download deferred: Check WiFi/Battery constraints", Toast.LENGTH_LONG).show();
+                stopSelf();
+            }
         }
         return START_NOT_STICKY;
+    }
+
+    private boolean shouldProceedWithDownload() {
+        if (modelManager.isWifiOnly() && !isWifiConnected()) return false;
+        if (modelManager.isChargingOnly() && !isCharging()) return false;
+        return true;
+    }
+
+    private boolean isWifiConnected() {
+        android.net.ConnectivityManager cm = (android.net.ConnectivityManager) getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getType() == android.net.ConnectivityManager.TYPE_WIFI;
+    }
+
+    private boolean isCharging() {
+        android.content.Intent intent = registerReceiver(null, new android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED));
+        int status = intent.getIntExtra(android.os.BatteryManager.EXTRA_STATUS, -1);
+        return status == android.os.BatteryManager.BATTERY_STATUS_CHARGING || status == android.os.BatteryManager.BATTERY_STATUS_FULL;
     }
 
     private void startDownload(String modelId) {
