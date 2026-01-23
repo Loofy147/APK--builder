@@ -27,6 +27,10 @@ public class AgentOrchestrator {
         }
     }
 
+    public Collection<Agent> getRegisteredAgents() {
+        return agents.values();
+    }
+
     public AgentResponse processSingle(AgentContext context, String userInput) {
         AgentInput input = new AgentInput(userInput,
             AgentInput.InputType.TEXT, Collections.emptyMap());

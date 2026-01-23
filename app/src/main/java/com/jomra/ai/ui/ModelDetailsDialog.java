@@ -42,7 +42,16 @@ public class ModelDetailsDialog extends Dialog {
         tvAuthor.setText("By " + model.author);
         tvLicense.setText("License: " + model.license);
         tvSize.setText(String.format("%.1f MB", model.sizeBytes / (1024.0 * 1024)));
-        tvCapabilities.setText("Capabilities: " + (model.capabilities != null ? String.join(", ", model.capabilities) : "N/A"));
+        String caps = "N/A";
+        if (model.capabilities != null && !model.capabilities.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < model.capabilities.size(); i++) {
+                sb.append(model.capabilities.get(i));
+                if (i < model.capabilities.size() - 1) sb.append(", ");
+            }
+            caps = sb.toString();
+        }
+        tvCapabilities.setText("Capabilities: " + caps);
         tvRequirements.setText(String.format("Requires: Android %d+, %d MB RAM", model.minAndroidVersion, model.minRamMB));
 
         if (catalog.isModelDownloaded(model.id)) {

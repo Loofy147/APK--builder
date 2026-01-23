@@ -101,6 +101,15 @@ public class MoazizOrchestrator {
     private List<String> selectAgents(String query) {
         // Simple AAR logic based on keyword matching and performance
         List<String> selection = new ArrayList<>();
+        String lowerQuery = query.toLowerCase();
+
+        // New Logic: Direct model capability mapping
+        if (lowerQuery.contains("code") || lowerQuery.contains("program")) {
+            if (registeredAgents.containsKey("mistral_agent")) selection.add("mistral_agent");
+        }
+        if (lowerQuery.contains("analyze") || lowerQuery.contains("reason")) {
+            selection.add("chain_of_thought");
+        }
 
         // Consult learned policy
         Map<String, Object> action = policy.getAction("env_coordination", "medium", "high_perf");
@@ -110,6 +119,7 @@ public class MoazizOrchestrator {
                 // Map Moaziz IDs to Jomra IDs
                 if (id.equals("writer")) selection.add("qa_agent");
                 if (id.equals("researcher")) selection.add("tool_agent");
+                if (id.equals("analyst") && registeredAgents.containsKey("chain_of_thought")) selection.add("chain_of_thought");
             }
         }
 

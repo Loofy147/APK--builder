@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_chat"
+            android:title="Chat" />
+        <item
+            android:id="@+id/nav_marketplace"
+            android:title="Model Marketplace" />
+    </group>
+
+    <item android:title="Agent Modes">
+        <menu>
+            <item
+                android:id="@+id/mode_qa"
+                android:title="QA Mode" />
+            <item
+                android:id="@+id/mode_tool"
+                android:title="Tool Mode" />
+            <item
+                android:id="@+id/mode_rl"
+                android:title="RL Mode" />
+            <item
+                android:id="@+id/mode_moaziz"
+                android:title="Moaziz Mode" />
+        </menu>
+    </item>
+
+    <item android:title="Options">
+        <menu>
+            <item
+                android:id="@+id/nav_clear_history"
+                android:title="Clear History" />
+            <item
+                android:id="@+id/nav_settings"
+                android:title="Settings" />
+        </menu>
+    </item>
+</menu>
