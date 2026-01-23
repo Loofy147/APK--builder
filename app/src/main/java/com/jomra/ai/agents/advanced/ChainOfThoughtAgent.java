@@ -5,17 +5,21 @@ import android.util.Log;
 import com.jomra.ai.agents.*;
 import com.jomra.ai.models.ModelManager;
 import com.jomra.ai.tools.*;
+import com.jomra.ai.memory.MemorySystem;
+import com.jomra.ai.memory.MemoryItem;
 import java.util.*;
 
 public class ChainOfThoughtAgent implements Agent {
     private final Agent qaAgent;
     private final ToolRegistry toolRegistry;
+    private final MemorySystem memory;
     private boolean initialized = false;
 
     public ChainOfThoughtAgent(Context context, ModelManager modelManager,
-                              ToolRegistry toolRegistry, Agent qaAgent) {
+                              ToolRegistry toolRegistry, Agent qaAgent, MemorySystem memory) {
         this.toolRegistry = toolRegistry;
         this.qaAgent = qaAgent;
+        this.memory = memory;
     }
 
     @Override
@@ -43,6 +47,10 @@ public class ChainOfThoughtAgent implements Agent {
             reasoningSteps.add("Calculate the result using the Calculator tool.");
         } else {
             reasoningSteps.add("Analyze query intent.");
+            List<MemoryItem> recalled = memory.recall(query, 2);
+            if (!recalled.isEmpty()) {
+                reasoningSteps.add("Found " + recalled.size() + " relevant context items in memory.");
+            }
             reasoningSteps.add("Retrieve relevant information from memory.");
             reasoningSteps.add("Synthesize a response based on available data.");
         }

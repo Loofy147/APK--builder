@@ -3,6 +3,7 @@ package com.jomra.ai.models;
 import android.content.Context;
 import android.util.Log;
 import com.google.gson.Gson;
+import com.jomra.ai.api.APIClient;
 import com.jomra.ai.storage.SecureStorage;
 import java.io.*;
 import java.util.*;
@@ -27,7 +28,7 @@ public class ModelCatalog {
     public void refreshCatalog(CatalogCallback callback) {
         new Thread(() -> {
             try {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = APIClient.getSharedClient();
                 Request request = new Request.Builder().url(CATALOG_URL).build();
                 Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {

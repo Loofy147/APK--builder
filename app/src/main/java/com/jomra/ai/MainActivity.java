@@ -7,9 +7,11 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import android.content.Intent;
 import com.jomra.ai.agents.*;
 import com.jomra.ai.agents.advanced.*;
 import com.jomra.ai.api.APIClient;
+import com.jomra.ai.memory.MemorySystem;
 import com.jomra.ai.models.ModelManager;
 import com.jomra.ai.tools.ToolRegistry;
 import java.util.Calendar;
@@ -19,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private TextInputEditText etUserInput;
-    private MaterialButton btnSend, btnToolMode, btnRLMode, btnClearHistory;
+    private MaterialButton btnSend, btnToolMode, btnRLMode, btnMoazizMode, btnClearHistory, btnMarketplace;
     private TextView tvResponse, tvAgentInfo, tvStats;
     private ProgressBar progressBar;
     private ScrollView scrollView;
@@ -29,13 +31,14 @@ public class MainActivity extends AppCompatActivity {
     private ModelManager modelManager;
     private ToolRegistry toolRegistry;
     private APIClient apiClient;
+    private MemorySystem memorySystem;
     private ConversationHistory conversationHistory;
     private AppState currentAppState;
 
     private AgentMode currentMode = AgentMode.QA;
     private int messageCount = 0;
 
-    private enum AgentMode { QA, TOOL, RL }
+    private enum AgentMode { QA, TOOL, RL, MOAZIZ }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btnSend);
         btnToolMode = findViewById(R.id.btnToolMode);
         btnRLMode = findViewById(R.id.btnRLMode);
+        btnMoazizMode = findViewById(R.id.btnMoazizMode);
         btnClearHistory = findViewById(R.id.btnClearHistory);
+        btnMarketplace = findViewById(R.id.btnMarketplace);
         tvResponse = findViewById(R.id.tvResponse);
         tvAgentInfo = findViewById(R.id.tvAgentInfo);
         tvStats = findViewById(R.id.tvStats);
@@ -61,7 +66,12 @@ public class MainActivity extends AppCompatActivity {
         btnSend.setOnClickListener(v -> handleUserInput());
         btnToolMode.setOnClickListener(v -> switchMode(AgentMode.TOOL));
         btnRLMode.setOnClickListener(v -> switchMode(AgentMode.RL));
+        btnMoazizMode.setOnClickListener(v -> switchMode(AgentMode.MOAZIZ));
         btnClearHistory.setOnClickListener(v -> clearHistory());
+        btnMarketplace.setOnClickListener(v -> {
+            Intent intent = new Intent(this, com.jomra.ai.ui.ModelMarketplaceActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void initializeAISystem() {
@@ -81,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 modelManager = new ModelManager(this);
                 toolRegistry = new ToolRegistry(this);
                 apiClient = new APIClient();
+                memorySystem = new MemorySystem(this);
                 orchestrator = new AgentOrchestrator();
 
                 Agent qaAgent = new QAAgent(this, modelManager);
@@ -89,9 +100,14 @@ public class MainActivity extends AppCompatActivity {
                 orchestrator.registerAgent(new ToolAgent(this, toolRegistry));
 
                 // Advanced Agents
-                orchestrator.registerAgent(new ChainOfThoughtAgent(this, modelManager, toolRegistry, qaAgent));
+                orchestrator.registerAgent(new ChainOfThoughtAgent(this, modelManager, toolRegistry, qaAgent, memorySystem));
                 orchestrator.registerAgent(new MultimodalAgent(this, modelManager));
                 orchestrator.registerAgent(new PlanningAgent());
+
+                MoazizAgent moazizAgent = new MoazizAgent(this, memorySystem);
+                moazizAgent.registerInternalAgent(qaAgent);
+                moazizAgent.registerInternalAgent(new ToolAgent(this, toolRegistry));
+                orchestrator.registerAgent(moazizAgent);
 
                 conversationHistory = new ConversationHistory(20);
                 currentAppState = buildAppState();
@@ -132,9 +148,16 @@ public class MainActivity extends AppCompatActivity {
                     .history(conversationHistory)
                     .training(currentMode == AgentMode.RL)
                     .build();
-                AgentResponse response = orchestrator.processSingle(context, input);
+                AgentResponse response;
+                if (currentMode == AgentMode.MOAZIZ) {
+                    response = orchestrator.processPipeline(context, input, new String[]{"moaziz_agent"});
+                } else {
+                    response = orchestrator.processSingle(context, input);
+                }
+
                 if (response != null && response.isSuccess()) {
                     conversationHistory.addTurn(input, response.getText());
+                    memorySystem.remember(input, response.getText(), 0.5f, null);
                 }
                 runOnUiThread(() -> {
                     showLoading(false);
@@ -179,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         updateAgentInfo();
         btnToolMode.setEnabled(mode != AgentMode.TOOL);
         btnRLMode.setEnabled(mode != AgentMode.RL);
+        btnMoazizMode.setEnabled(mode != AgentMode.MOAZIZ);
     }
 
     private void updateAgentInfo() {

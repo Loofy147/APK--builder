@@ -2,6 +2,7 @@ package com.jomra.ai.models;
 
 import android.content.Context;
 import android.util.Log;
+import com.jomra.ai.api.APIClient;
 import com.jomra.ai.storage.SecureStorage;
 import okhttp3.*;
 import java.io.*;
@@ -37,7 +38,7 @@ public class LargeModelManager {
                 File finalFile = new File(modelDir, model.filename);
 
                 long downloaded = tempFile.exists() ? tempFile.length() : 0;
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = APIClient.getSharedClient();
                 Request request = new Request.Builder()
                         .url(model.downloadUrl)
                         .addHeader("Range", "bytes=" + downloaded + "-")

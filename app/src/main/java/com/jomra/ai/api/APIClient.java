@@ -11,12 +11,21 @@ public class APIClient {
     private final OkHttpClient client;
     private final Gson gson;
 
+    private static OkHttpClient sharedClient;
+
     public APIClient() {
-        this.client = new OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .build();
+        this.client = getSharedClient();
         this.gson = new Gson();
+    }
+
+    public static synchronized OkHttpClient getSharedClient() {
+        if (sharedClient == null) {
+            sharedClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+        }
+        return sharedClient;
     }
 
     public void get(String url, Callback callback) {
