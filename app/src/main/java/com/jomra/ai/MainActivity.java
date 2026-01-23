@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jomra.ai.agents.*;
+import com.jomra.ai.agents.advanced.*;
 import com.jomra.ai.api.APIClient;
 import com.jomra.ai.models.ModelManager;
 import com.jomra.ai.tools.ToolRegistry;
@@ -82,9 +83,15 @@ public class MainActivity extends AppCompatActivity {
                 apiClient = new APIClient();
                 orchestrator = new AgentOrchestrator();
 
-                orchestrator.registerAgent(new QAAgent(this, modelManager));
+                Agent qaAgent = new QAAgent(this, modelManager);
+                orchestrator.registerAgent(qaAgent);
                 orchestrator.registerAgent(new RLAgent(this, modelManager));
                 orchestrator.registerAgent(new ToolAgent(this, toolRegistry));
+
+                // Advanced Agents
+                orchestrator.registerAgent(new ChainOfThoughtAgent(this, modelManager, toolRegistry, qaAgent));
+                orchestrator.registerAgent(new MultimodalAgent(this, modelManager));
+                orchestrator.registerAgent(new PlanningAgent());
 
                 conversationHistory = new ConversationHistory(20);
                 currentAppState = buildAppState();

@@ -1,0 +1,42 @@
+{
+  "models": [
+    {
+      "id": "llama2-7b-chat-q4",
+      "name": "LLaMA 2 Chat (7B Q4)",
+      "description": "Meta's powerful conversational AI, 4-bit quantized.",
+      "category": "LANGUAGE",
+      "version": "2.0",
+      "sizeBytes": 3900000000,
+      "downloadUrl": "https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf",
+      "sha256": "abc123def456",
+      "filename": "llama2_7b_chat_q4.tflite",
+      "featured": true,
+      "rating": 4.8,
+      "downloadCount": 15000,
+      "author": "Meta AI",
+      "license": "LLaMA 2 Community License",
+      "capabilities": ["chat", "reasoning"],
+      "minAndroidVersion": 24,
+      "minRamMB": 6144
+    },
+    {
+      "id": "clip-vit-large",
+      "name": "CLIP ViT-L/14",
+      "description": "OpenAI's vision-language model.",
+      "category": "MULTIMODAL",
+      "version": "1.0",
+      "sizeBytes": 890000000,
+      "downloadUrl": "https://huggingface.co/laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K/resolve/main/model.safetensors",
+      "sha256": "def456ghi789",
+      "filename": "clip_vit_large.tflite",
+      "featured": true,
+      "rating": 4.7,
+      "downloadCount": 12000,
+      "author": "OpenAI",
+      "license": "MIT",
+      "capabilities": ["vision", "embedding"],
+      "minAndroidVersion": 24,
+      "minRamMB": 3072
+    }
+  ]
+}
