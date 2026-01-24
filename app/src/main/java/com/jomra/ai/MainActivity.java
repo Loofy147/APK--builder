@@ -17,6 +17,8 @@ import com.jomra.ai.agents.*;
 import com.jomra.ai.agents.advanced.*;
 import com.jomra.ai.api.APIClient;
 import com.jomra.ai.memory.MemorySystem;
+import com.jomra.ai.models.ModelCatalog;
+import com.jomra.ai.models.ModelInfo;
 import com.jomra.ai.models.ModelManager;
 import com.jomra.ai.tools.ToolRegistry;
 import java.util.Calendar;

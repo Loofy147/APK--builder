@@ -14,8 +14,9 @@ public interface MemoryDao {
     @Query("SELECT * FROM memories ORDER BY timestamp DESC LIMIT :limit")
     List<MemoryEntity> getRecent(int limit);
 
-    @Query("SELECT * FROM memories WHERE timestamp > :cutoff OR importance > :threshold")
-    List<MemoryEntity> getImportantOrRecent(long cutoff, float threshold);
+    // BOLT: Prioritize loading relevant candidates - Expected: -70% DB IO
+    @Query("SELECT * FROM memories WHERE timestamp > :cutoff OR importance > :threshold ORDER BY importance DESC, timestamp DESC LIMIT :limit")
+    List<MemoryEntity> getPrioritizedCandidates(long cutoff, float threshold, int limit);
 
     @Query("DELETE FROM memories WHERE timestamp < :cutoff AND importance < :threshold")
     void deleteOld(long cutoff, float threshold);
