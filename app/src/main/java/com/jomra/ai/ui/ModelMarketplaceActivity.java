@@ -79,7 +79,7 @@ public class ModelMarketplaceActivity extends AppCompatActivity {
     }
 
     private void initializeData() {
-        catalog = new ModelCatalog(this);
+        catalog = ModelCatalog.getInstance(this);
         adapter = new ModelAdapter(this, currentModels, catalog, this::onModelClick);
         recyclerView.setAdapter(adapter);
     }

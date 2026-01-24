@@ -19,7 +19,7 @@ public class LargeModelManager {
     public LargeModelManager(Context context) {
         this.context = context.getApplicationContext();
         this.secureStorage = new SecureStorage(context);
-        this.catalog = new ModelCatalog(context);
+        this.catalog = ModelCatalog.getInstance(context);
     }
 
     public void downloadModel(String modelId, DownloadListener listener) {

@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 orchestrator.registerAgent(moazizAgent);
 
                 // Dynamically register agents for downloaded models
-                ModelCatalog catalog = new ModelCatalog(this);
+                ModelCatalog catalog = ModelCatalog.getInstance(this);
                 for (ModelInfo model : catalog.getDownloadedModels()) {
                     if (model.id.contains("mistral")) {
                         orchestrator.registerAgent(new QAAgent(this, modelManager)); // Use QAAgent as placeholder for specialized model loader
