@@ -5,26 +5,63 @@ import java.util.Collection;
 public class AgentSelector {
     public Agent selectAgent(AgentInput input, Collection<Agent> agents) {
         String text = input.getText().toLowerCase();
+        AgentCapability targetCapability;
+
         if (text.contains("calculate") || text.contains("math")) {
-            return findByCapability(agents, AgentCapability.TOOL_USAGE);
+            targetCapability = AgentCapability.TOOL_USAGE;
         } else if (text.contains("learn") || text.contains("remember")) {
-            return findByCapability(agents, AgentCapability.REINFORCEMENT_LEARNING);
+            targetCapability = AgentCapability.REINFORCEMENT_LEARNING;
         } else if (text.contains("search") || text.contains("find")) {
-            return findByCapability(agents, AgentCapability.TOOL_USAGE);
+            targetCapability = AgentCapability.TOOL_USAGE;
         } else {
-            return findByCapability(agents, AgentCapability.QUESTION_ANSWERING);
+            targetCapability = AgentCapability.QUESTION_ANSWERING;
         }
+
+        return findStrategicAgent(agents, targetCapability);
     }
 
-    private Agent findByCapability(Collection<Agent> agents,
-                                   AgentCapability capability) {
+    /**
+     * SUN-TZU: Strategic selection prioritizing HEALTHY agents.
+     * "The wise warrior avoids the battle." - By picking healthy agents, we avoid failures.
+     */
+    private Agent findStrategicAgent(Collection<Agent> agents, AgentCapability capability) {
+        Agent bestAgent = null;
+
         for (Agent agent : agents) {
-            for (AgentCapability cap : agent.getCapabilities()) {
-                if (cap == capability) {
-                    return agent;
+            if (hasCapability(agent, capability)) {
+                HealthStatus.Status currentStatus = agent.getHealthStatus().getStatus();
+
+                if (bestAgent == null) {
+                    bestAgent = agent;
+                    continue;
+                }
+
+                HealthStatus.Status bestStatus = bestAgent.getHealthStatus().getStatus();
+
+                // Prioritize Healthy over anything else
+                if (currentStatus == HealthStatus.Status.HEALTHY && bestStatus != HealthStatus.Status.HEALTHY) {
+                    bestAgent = agent;
+                }
+                // If both are Healthy, pick the one with lower latency
+                else if (currentStatus == HealthStatus.Status.HEALTHY && bestStatus == HealthStatus.Status.HEALTHY) {
+                    if (agent.getEstimatedLatencyMs() < bestAgent.getEstimatedLatencyMs()) {
+                        bestAgent = agent;
+                    }
+                }
+                // If current is DEGRADED but best is UNHEALTHY
+                else if (currentStatus == HealthStatus.Status.DEGRADED && bestStatus == HealthStatus.Status.UNHEALTHY) {
+                    bestAgent = agent;
                 }
             }
         }
-        return agents.isEmpty() ? null : agents.iterator().next();
+
+        return bestAgent != null ? bestAgent : (agents.isEmpty() ? null : agents.iterator().next());
+    }
+
+    private boolean hasCapability(Agent agent, AgentCapability capability) {
+        for (AgentCapability cap : agent.getCapabilities()) {
+            if (cap == capability) return true;
+        }
+        return false;
     }
 }

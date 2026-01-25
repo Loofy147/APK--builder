@@ -77,19 +77,27 @@ public class AgentOrchestrator {
     public AgentResponse processPipeline(AgentContext context,
                                         String userInput,
                                         String[] agentOrder) {
+        // BOLT: Initial input allocation
         AgentInput input = new AgentInput(userInput,
             AgentInput.InputType.TEXT, Collections.emptyMap());
         AgentResponse currentResponse = null;
+
         for (String agentId : agentOrder) {
             Agent agent = agents.get(agentId);
             if (agent == null) {
                 Log.w(TAG, "Agent not found in pipeline: " + agentId);
                 continue;
             }
+
+            // BOLT: Reuse input if response text is identical to current input text
             if (currentResponse != null && currentResponse.isSuccess()) {
-                input = new AgentInput(currentResponse.getText(),
-                    AgentInput.InputType.TEXT, currentResponse.getMetadata());
+                String nextText = currentResponse.getText();
+                if (nextText == null || !nextText.equals(input.getText())) {
+                    input = new AgentInput(nextText,
+                        AgentInput.InputType.TEXT, currentResponse.getMetadata());
+                }
             }
+
             currentResponse = executeWithTimeout(agent, context, input);
             if (!currentResponse.isSuccess()) {
                 Log.w(TAG, "Pipeline stopped at agent: " + agent.getName());

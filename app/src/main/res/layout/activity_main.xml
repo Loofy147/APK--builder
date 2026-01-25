@@ -22,6 +22,7 @@
             app:title="Jomra AI"
             app:titleTextColor="#FFFFFF"
             app:navigationIcon="@drawable/ic_menu"
+            android:contentDescription="Main navigation menu"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Header Card with Agent Info -->
@@ -159,6 +160,7 @@
                     android:layout_margin="4dp"
                     android:text="→"
                     android:textSize="20sp"
+                    android:contentDescription="Send message"
                     app:cornerRadius="24dp"
                     style="@style/Widget.MaterialComponents.Button" />
             </LinearLayout>
