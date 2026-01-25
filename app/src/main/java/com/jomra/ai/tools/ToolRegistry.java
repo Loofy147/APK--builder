@@ -21,6 +21,11 @@ public class ToolRegistry {
         registerTool(new WebSearchTool(context));
         registerTool(new NotificationTool(context));
         registerTool(new InstalledAppsTool(context));
+
+        // New Connectors
+        registerTool(new GitHubTool(context));
+        registerTool(new SupabaseTool(context));
+        registerTool(new VercelTool(context));
     }
 
     public void registerTool(Tool tool) {

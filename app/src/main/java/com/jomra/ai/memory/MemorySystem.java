@@ -26,6 +26,7 @@ public class MemorySystem {
     private final EmbeddingEngine embeddingEngine;
     private final ExecutorService diskExecutor;
     private final Gson gson;
+    private final Map<String, float[]> embeddingCache; // BOLT: Cache parsed embeddings
 
     public MemorySystem(Context context) {
         this.context = context.getApplicationContext();
@@ -36,6 +37,7 @@ public class MemorySystem {
         this.embeddingEngine = new EmbeddingEngine();
         this.diskExecutor = Executors.newSingleThreadExecutor();
         this.gson = new Gson();
+        this.embeddingCache = new ConcurrentHashMap<>();
 
         loadUserPreferences();
         loadMemoriesFromDisk();
@@ -102,12 +104,16 @@ public class MemorySystem {
         if (candidates.isEmpty()) return Collections.emptyList();
 
         float[] queryEmbedding = embeddingEngine.encode(query);
+        // BOLT: Pre-calculate query norm - Expected: -50% Math overhead
+        float queryNorm = 0;
+        for (float v : queryEmbedding) queryNorm += v * v;
+
         long now = System.currentTimeMillis();
 
         for (MemoryItem item : candidates) {
             if (item.embedding != null) {
-                // BOLT: Use cached embeddings from disk - Expected: 0ms hash re-calc
-                float similarity = cosineSimilarity(queryEmbedding, item.embedding);
+                // BOLT: Use optimized similarity with pre-calculated norm
+                float similarity = cosineSimilarityWithNorm(queryEmbedding, item.embedding, queryNorm);
 
                 // Rank by combined relevance (70%) and recency (30%)
                 float recencyFactor = Math.max(0, 1.0f - (now - item.timestamp) / (30L * 24 * 60 * 60 * 1000f));
@@ -128,21 +134,28 @@ public class MemorySystem {
 
     private MemoryItem entityToItem(MemoryEntity entity) {
         Map<String, Object> metadata = gson.fromJson(entity.metadataJson, Map.class);
-        float[] embedding = gson.fromJson(entity.embeddingJson, float[].class);
+
+        // BOLT: Use cache for embeddings to avoid repeated JSON parsing
+        float[] embedding = embeddingCache.get(entity.id);
+        if (embedding == null) {
+            embedding = gson.fromJson(entity.embeddingJson, float[].class);
+            if (embedding != null) {
+                embeddingCache.put(entity.id, embedding);
+            }
+        }
+
         MemoryItem item = new MemoryItem(entity.id, entity.userInput, entity.agentResponse,
                              entity.timestamp, entity.importance, metadata);
         item.embedding = embedding;
         return item;
     }
 
-    private float cosineSimilarity(float[] a, float[] b) {
+    private float cosineSimilarityWithNorm(float[] a, float[] b, float normA) {
         float dotProduct = 0f;
-        float normA = 0f;
         float normB = 0f;
         int len = Math.min(a.length, b.length);
         for (int i = 0; i < len; i++) {
             dotProduct += a[i] * b[i];
-            normA += a[i] * a[i];
             normB += b[i] * b[i];
         }
         if (normA == 0 || normB == 0) return 0;

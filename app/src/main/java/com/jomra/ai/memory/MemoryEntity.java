@@ -2,9 +2,14 @@ package com.jomra.ai.memory;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Index;
 import androidx.annotation.NonNull;
 
-@Entity(tableName = "memories")
+/**
+ * TUBER: Optimized Memory Entity with indices for faster retrieval.
+ */
+@Entity(tableName = "memories",
+        indices = {@Index("timestamp"), @Index("importance")})
 public class MemoryEntity {
     @PrimaryKey
     @NonNull

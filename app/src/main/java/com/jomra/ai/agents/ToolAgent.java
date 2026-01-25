@@ -53,6 +53,18 @@ public class ToolAgent implements Agent {
             params.put("message", msg);
         } else if (lowerQuery.contains("list apps") || lowerQuery.contains("show apps")) {
             toolName = "list_apps";
+        } else if (lowerQuery.contains("github") || lowerQuery.contains("repo")) {
+            toolName = "github_connector";
+            params.put("action", "list_repos");
+            params.put("owner", "jomra-ai"); // Default example
+        } else if (lowerQuery.contains("supabase") || lowerQuery.contains("db")) {
+            toolName = "supabase_connector";
+            params.put("operation", "select");
+            params.put("query", "users");
+        } else if (lowerQuery.contains("vercel") || lowerQuery.contains("deploy")) {
+            toolName = "vercel_connector";
+            params.put("action", "status");
+            params.put("projectId", "default-project");
         }
 
         if (toolName == null) {

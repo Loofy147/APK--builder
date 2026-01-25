@@ -20,7 +20,8 @@
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Search models..."/>
+            android:queryHint="Search models..."
+            android:contentDescription="Search for AI models"/>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -39,6 +40,7 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="Model categories"
             app:tabMode="scrollable"/>
     </com.google.android.material.appbar.AppBarLayout>
 
