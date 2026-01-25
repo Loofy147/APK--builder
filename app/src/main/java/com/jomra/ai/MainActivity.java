@@ -176,6 +176,28 @@ public class MainActivity extends AppCompatActivity {
     private void handleUserInput() {
         String input = etUserInput.getText().toString().trim();
         if (input.isEmpty()) return;
+
+        // PALLETTE: Sensitive tool confirmation logic
+        String lowerInput = input.toLowerCase();
+        if (lowerInput.contains("github") || lowerInput.contains("supabase") || lowerInput.contains("vercel")) {
+            showToolConfirmation(input);
+        } else {
+            processInput(input);
+        }
+    }
+
+    private void showToolConfirmation(final String input) {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Confirm Action")
+            .setMessage("This request may involve sensitive tool operations. Do you want to proceed?")
+            .setPositiveButton("Proceed", (dialog, which) -> processInput(input))
+            .setNegativeButton("Cancel", (dialog, which) -> {
+                addMessageToHistory("System", "Action cancelled by user.", false);
+            })
+            .show();
+    }
+
+    private void processInput(String input) {
         addMessageToHistory("You", input, true);
         etUserInput.setText("");
         showLoading(true);

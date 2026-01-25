@@ -37,8 +37,7 @@ public class ConversationHistory {
     private int getTotalTokens() {
         int total = 0;
         for (ConversationTurn turn : turns) {
-            total += TokenUtils.estimateTokens(turn.userInput);
-            total += TokenUtils.estimateTokens(turn.agentResponse);
+            total += turn.getTokens(); // BOLT: Use cached tokens
         }
         return total;
     }
@@ -51,11 +50,16 @@ public class ConversationHistory {
         public final String userInput;
         public final String agentResponse;
         public final long timestamp;
+        private final int tokens; // BOLT: Cached token count
 
         public ConversationTurn(String input, String response) {
             this.userInput = input;
             this.agentResponse = response;
             this.timestamp = System.currentTimeMillis();
+            // BOLT: Pre-calculate tokens on creation
+            this.tokens = TokenUtils.estimateTokens(input) + TokenUtils.estimateTokens(response);
         }
+
+        public int getTokens() { return tokens; }
     }
 }
