@@ -21,6 +21,7 @@ import com.jomra.ai.models.ModelCatalog;
 import com.jomra.ai.models.ModelInfo;
 import com.jomra.ai.models.ModelManager;
 import com.jomra.ai.tools.ToolRegistry;
+import com.jomra.ai.utils.NavigationManager;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private MemorySystem memorySystem;
     private ConversationHistory conversationHistory;
     private AppState currentAppState;
+    private NavigationManager navigationManager;
 
     private AgentMode currentMode = AgentMode.QA;
     private int messageCount = 0;
@@ -77,24 +79,28 @@ public class MainActivity extends AppCompatActivity {
         com.google.android.material.appbar.MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
+        navigationManager = new NavigationManager(this, drawerLayout);
+
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.nav_marketplace) {
-                startActivity(new Intent(this, com.jomra.ai.ui.ModelMarketplaceActivity.class));
-            } else if (id == R.id.nav_clear_history) {
+            if (id == R.id.nav_clear_history) {
                 clearHistory();
+                drawerLayout.closeDrawer(GravityCompat.START);
             } else if (id == R.id.mode_qa) {
                 switchMode(AgentMode.QA);
+                drawerLayout.closeDrawer(GravityCompat.START);
             } else if (id == R.id.mode_tool) {
                 switchMode(AgentMode.TOOL);
+                drawerLayout.closeDrawer(GravityCompat.START);
             } else if (id == R.id.mode_rl) {
                 switchMode(AgentMode.RL);
+                drawerLayout.closeDrawer(GravityCompat.START);
             } else if (id == R.id.mode_moaziz) {
                 switchMode(AgentMode.MOAZIZ);
-            } else if (id == R.id.nav_settings) {
-                Toast.makeText(this, "Settings coming soon", Toast.LENGTH_SHORT).show();
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                return navigationManager.handleNavigation(id);
             }
-            drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
     }

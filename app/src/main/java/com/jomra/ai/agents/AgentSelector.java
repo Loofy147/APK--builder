@@ -13,6 +13,12 @@ public class AgentSelector {
             targetCapability = AgentCapability.REINFORCEMENT_LEARNING;
         } else if (text.contains("search") || text.contains("find")) {
             targetCapability = AgentCapability.TOOL_USAGE;
+        } else if (text.contains("github") || text.contains("repo") || text.contains("code")) {
+            targetCapability = AgentCapability.TOOL_USAGE; // GitHub Connector
+        } else if (text.contains("supabase") || text.contains("db") || text.contains("database")) {
+            targetCapability = AgentCapability.TOOL_USAGE; // Supabase Connector
+        } else if (text.contains("vercel") || text.contains("deploy")) {
+            targetCapability = AgentCapability.TOOL_USAGE; // Vercel Connector
         } else {
             targetCapability = AgentCapability.QUESTION_ANSWERING;
         }
